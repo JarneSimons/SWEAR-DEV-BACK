@@ -1,24 +1,17 @@
 const express = require('express')
 const router = express.Router()
+const controllerSneakers = require('../../../controllers/api/v1/sneakers')
 
 // get sneakers
-router.get('/', (req, res) => {
-    res.send('Get sneakers')
-})
+router.get('/', controllerSneakers.getSneakers)
 
 // post sneakers
-router.post('/', (req, res) => {
-    res.send('Post sneakers')
-})
+router.post('/', controllerSneakers.postSneakers)
 
 // update sneakers
-router.put('/:id', (req, res) => {
-    res.send('Put sneakers' + req.params.id)
-})
+router.put('/:id', controllerSneakers.updateSneaker)
 
 // delete sneakers
-router.delete('/:id', (req, res) => {
-    res.send('Delete sneakers' + req.params.id)
-})
+router.delete('/:id', controllerSneakers.deleteSneaker)
 
 module.exports = router
