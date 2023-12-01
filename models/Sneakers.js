@@ -4,5 +4,5 @@ const sneakersSchema = new Schema({
     size: Number,
     description: String,
     price: Number,
-
+    
 });
