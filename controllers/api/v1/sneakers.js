@@ -1,13 +1,4 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const sneakersSchema = new Schema({
-    "name": String,
-    "size": Number,
-    "user": String,
-    "color": String,
-});
-
-const Sneakers = mongoose.model('Sneakers', sneakersSchema);
+const Sneakers = require('../../../models/Sneakers');
 
 
 const getSneakers = async (req, res) => {
@@ -30,10 +21,12 @@ const getSneakers = async (req, res) => {
     }
 };
 
+// post sneakers to database
 const postSneakers = async (req, res) => {
     try {
         let sneakers = new Sneakers();
         sneakers.name = req.body.name;
+        sneakers.email = req.body.email;
         sneakers.size = req.body.size;
         sneakers.user = req.body.user;
         sneakers.color = req.body.color;
