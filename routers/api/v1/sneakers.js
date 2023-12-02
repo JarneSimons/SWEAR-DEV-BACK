@@ -14,4 +14,7 @@ router.put('/:id', controllerSneakers.updateSneaker)
 // delete sneakers
 router.delete('/:id', controllerSneakers.deleteSneaker)
 
+// get details of a sneaker with specific id
+router.get('/:id', controllerSneakers.getSneakerById)
+
 module.exports = router

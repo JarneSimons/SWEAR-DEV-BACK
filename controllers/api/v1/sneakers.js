@@ -1,9 +1,9 @@
 const Sneakers = require('../../../models/Sneakers');
 
-
+// get sneakers from database
 const getSneakers = async (req, res) => {
     try {
-        const sneakers = await Sneakers.find({ user: "Jarne Simons" });
+        const sneakers = await Sneakers.find();
 
         res.json({
             "status": "success",
@@ -20,6 +20,46 @@ const getSneakers = async (req, res) => {
         });
     }
 };
+
+
+// get getSneakerById from database with specific id
+const getSneakerById = async (req, res) => {
+    try {
+        const sneakerId = req.params.id;
+
+        if (!mongoose.Types.ObjectId.isValid(sneakerId)) {
+            return res.status(400).json({
+                "status": "error",
+                "message": "Invalid ObjectId format"
+            });
+        }
+
+        const sneaker = await Sneakers.findById(sneakerId);
+
+        if (!sneaker) {
+            return res.status(404).json({
+                "status": "error",
+                "message": "Sneaker not found"
+            });
+        }
+
+        res.json({
+            "status": "success",
+            "data": {
+                "sneaker": sneaker
+            }
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            "status": "error",
+            "message": "Failed to get sneaker",
+            "error": err
+        });
+    }
+};
+
+
 
 // post sneakers to database
 const postSneakers = async (req, res) => {
@@ -135,5 +175,6 @@ module.exports.getSneakers = getSneakers
 module.exports.postSneakers = postSneakers
 module.exports.updateSneaker = updateSneaker
 module.exports.deleteSneaker = deleteSneaker
+module.exports.getSneakerById = getSneakerById
 
 
