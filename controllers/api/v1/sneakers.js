@@ -54,10 +54,48 @@ const updateSneaker = (req, res) => {
     res.send('Update sneakers' + req.params.id)
 }
 
-const deleteSneaker = (req, res) => {
-    res.send('Delete sneakers' + req.params.id)
-}
+// const deleteSneaker = (req, res) => {
+//     res.send('Delete sneakers' + req.params.id)
+// }
 
+// delete sneakers from database with specific id
+
+const mongoose = require('mongoose');
+const deleteSneaker = async (req, res) => {
+    try {
+        const sneakerId = req.params.id;
+
+        if (!mongoose.Types.ObjectId.isValid(sneakerId)) {
+            return res.status(400).json({
+                "status": "error",
+                "message": "Invalid ObjectId format"
+            });
+        }
+
+        const deletedSneaker = await Sneakers.findByIdAndDelete(sneakerId);
+
+        if (!deletedSneaker) {
+            return res.status(404).json({
+                "status": "error",
+                "message": "Sneaker not found"
+            });
+        }
+
+        res.json({
+            "status": "success",
+            "data": {
+                "sneaker": deletedSneaker
+            }
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            "status": "error",
+            "message": "Failed to delete sneaker",
+            "error": err
+        });
+    }
+};
 
 
 module.exports.getSneakers = getSneakers
