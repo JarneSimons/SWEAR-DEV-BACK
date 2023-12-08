@@ -1,18 +1,17 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-const logger = require('morgan');
+//const logger = require('morgan');
 const cors = require("cors");
-const cookieParser = require('cookie-parser');
-const mongoose = require('mongoose');
+//const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const getRawBody = require('raw-body');
 const bodyParser = require('body-parser');
 
 //routers
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const sneakersRouter = require('./routes/api/v1/sneakers');
+const indexRouter = require('./routers/index');
+const usersRouter = require('./routers/users');
+const sneakersRouter = require('.routers/api/v1/sneakers');
 
 //mongoose connection
 const mongoose = require('mongoose')
