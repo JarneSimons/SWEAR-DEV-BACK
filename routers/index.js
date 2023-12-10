@@ -1,40 +1,55 @@
-const express = require('express')
-const app = express()
-const port = 3000
-const sneakersRouter = require('./routers/api/v1/sneakers')
+var express = require('express');
+var router = express.Router();
 
-const mongoose = require('mongoose')
-mongoose.connect(
-  'mongodb://127.0.0.1:27017/sneakers',
-  { 
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    dbName: 'sneakers'
-  }
-).then(() => {
-  console.log('Connected to MongoDB');
-}).catch((error) => {
-  console.error('MongoDB connection error:', error);
+router.get('/', function (req, res){
+  res.render('index', {
+    title: 'Sneaker cofigurator'
+  });
 });
 
-
-
-//body parser
-app.use(express.json());
-//app use cors
-const cors = require('cors');
-app.use(cors());
+module.exports = router;
 
 
 
-app.get('/', (req, res) => {
-  res.send('Hello Worldddd!')
-})
+
+// const express = require('express')
+// const app = express()
+// //const port = 3000
+// const sneakersRouter = require('../routers/api/v1/sneakers')
+
+// const mongoose = require('mongoose')
+// mongoose.connect(
+//   'mongodb://127.0.0.1:27017/sneakers',
+//   { 
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     dbName: 'sneakers'
+//   }
+// ).then(() => {
+//   console.log('Connected to MongoDB');
+// }).catch((error) => {
+//   console.error('MongoDB connection error:', error);
+// });
 
 
-app.use('/api/v1/sneakers', sneakersRouter)
+
+// //body parser
+// app.use(express.json());
+// //app use cors
+// const cors = require('cors');
+// app.use(cors());
 
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+
+// app.get('/', (req, res) => {
+//   res.send('Hello Worldddd!')
+// })
+
+
+// app.use('/api/v1/sneakers', sneakersRouter)
+
+
+// app.listen(port, () => {
+//   console.log(`Example app listening on port ${port}`)
+// })
+
