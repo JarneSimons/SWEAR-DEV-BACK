@@ -2,34 +2,34 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 
-const signup = async (req, res, next) => {
-    let username = req.body.username; // UI of postman
-    let password = req.body.password;
+// const signup = async (req, res, next) => {
+//     let username = req.body.username; // UI of postman
+//     let password = req.body.password;
 
-    const user = new User({
-        username: username
-    });
-    await user.setPassword(password);
-    await user.save().then(result => {
-        //console.log(result);
+//     const user = new User({
+//         username: username
+//     });
+//     await user.setPassword(password);
+//     await user.save().then(result => {
+//         //console.log(result);
 
-        let token = jwt.sign({
-            uid: result._id,
-            username: result.username
-        }, config.get('jwt.secret'));
+//         let token = jwt.sign({
+//             uid: result._id,
+//             username: result.username
+//         }, config.get('jwt.secret'));
 
-        res.json({
-            "status": "success",
-            "data": {
-                "token": token
-            }
-        })
-    }).catch(error => {
-        res.json({
-            "status": "error"
-        })
-    });
-};
+//         res.json({
+//             "status": "success",
+//             "data": {
+//                 "token": token
+//             }
+//         })
+//     }).catch(error => {
+//         res.json({
+//             "status": "error"
+//         })
+//     });
+// };
 
 const login = async (req, res) => {
     const user = await User.authenticate(req.body.email, req.body.password).then(result => {
@@ -100,5 +100,6 @@ const changePassword = async (req, res) => {
     });
 }
 
-module.exports.signup = signup;
+//module.exports.signup = signup;
 module.exports.login = login;
+module.exports.changePassword = changePassword;
