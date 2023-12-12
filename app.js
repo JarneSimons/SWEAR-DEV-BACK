@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 
 
 //routers
-const indexRouter = require('./routers/index');
+const indexRouter = require('./index');
 const usersRouter = require('./routers/users');
 const sneakersRouter = require('./routers/api/v1/sneakers');
 
