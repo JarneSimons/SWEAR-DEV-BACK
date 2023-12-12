@@ -3,24 +3,67 @@ const Sneakers = require('../../../models/Sneakers');
 // get sneakers from database
 const getSneakers = async (req, res) => {
     try {
-        const sneakers = await Sneakers.find();
+        // Extract properties from the request query (changed from body)
+        const {
+            username,
+            email,
+            size,
+            laces,
+            inside,
+            outside_1,
+            outside_2,
+            outside_3,
+            sole_bottom,
+            sole_top,
+            texture,
+            price
+        } = req.query; // Use req.query to get parameters from the URL query string
+
+        // Create a query object with the provided properties
+        const query = {
+            username,
+            email,
+            size,
+            laces,
+            inside,
+            outside_1,
+            outside_2,
+            outside_3,
+            sole_bottom,
+            sole_top,
+            texture,
+            price
+        };
+
+        // Remove undefined or null properties from the query object
+        Object.keys(query).forEach(key => query[key] == null && delete query[key]);
+
+        // Find sneakers based on the query
+        const sneakers = await Sneakers.find(query);
+
+        // Check if no sneakers are found
+        if (sneakers.length === 0) {
+            return res.status(404).json({
+                status: "error",
+                message: "No sneakers found for the given username"
+            });
+        }
 
         res.json({
-            "status": "success",
-            "data": {
-                "sneakers": sneakers
+            status: "success",
+            data: {
+                sneakers
             }
         });
     } catch (err) {
         console.log(err);
         res.status(500).json({
-            "status": "error",
-            "message": "Failed to get sneakers",
-            "error": err
+            status: "error",
+            message: "Failed to get sneakers",
+            error: err
         });
     }
 };
-
 
 // get getSneakerById from database with specific id
 const getSneakerById = async (req, res) => {
@@ -29,8 +72,8 @@ const getSneakerById = async (req, res) => {
 
         if (!mongoose.Types.ObjectId.isValid(sneakerId)) {
             return res.status(400).json({
-                "status": "error",
-                "message": "Invalid ObjectId format"
+                status: "error",
+                message: "Invalid ObjectId format"
             });
         }
 
@@ -38,23 +81,23 @@ const getSneakerById = async (req, res) => {
 
         if (!sneaker) {
             return res.status(404).json({
-                "status": "error",
-                "message": "Sneaker not found"
+                status: "error",
+                message: "Sneaker not found"
             });
         }
 
         res.json({
-            "status": "success",
-            "data": {
-                "sneaker": sneaker
+            status: "success",
+            data: {
+                sneaker
             }
         });
     } catch (err) {
         console.log(err);
         res.status(500).json({
-            "status": "error",
-            "message": "Failed to get sneaker",
-            "error": err
+            status: "error",
+            message: "Failed to get sneaker",
+            error: err
         });
     }
 };
@@ -64,29 +107,56 @@ const getSneakerById = async (req, res) => {
 // post sneakers to database
 const postSneakers = async (req, res) => {
     try {
-        let sneakers = new Sneakers();
-        sneakers.name = req.body.name;
-        sneakers.email = req.body.email;
-        sneakers.size = req.body.size;
-        sneakers.user = req.body.user;
-        sneakers.color = req.body.color;
+        const {
+            username,
+            email,
+            size,
+            laces,
+            inside,
+            outside_1,
+            outside_2,
+            outside_3,
+            sole_bottom,
+            sole_top,
+            texture,
+            price
+        } = req.body;
+
+        const sneakers = new Sneakers({
+            username,
+            email,
+            size,
+            laces,
+            inside,
+            outside_1,
+            outside_2,
+            outside_3,
+            sole_bottom,
+            sole_top,
+            texture,
+            price
+        });
 
         const savedSneakers = await sneakers.save();
 
         res.json({
-            "status": "success",
-            "data": {
-                "sneakers": savedSneakers
+            status: "success",
+            data: {
+                sneakers: savedSneakers
             }
         });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({
-            "status": "error",
-            "message": "Failed to save sneakers",
-            "error": err
-        });
+    } catch (error) {
+        handlePostError(res, error, "Failed to save sneakers");
     }
+};
+
+const handlePostError = (res, error, message) => {
+    console.error(error);
+    res.status(500).json({
+        status: "error",
+        message,
+        error: error.message
+    });
 };
 
 
@@ -96,36 +166,73 @@ const updateSneaker = async (req, res) => {
 
         if (!mongoose.Types.ObjectId.isValid(sneakerId)) {
             return res.status(400).json({
-                "status": "error",
-                "message": "Invalid ObjectId format"
+                status: "error",
+                message: "Invalid ObjectId format"
             });
         }
 
+        // Extract properties from the request body
+        const {
+            username,
+            email,
+            size,
+            laces,
+            inside,
+            outside_1,
+            outside_2,
+            outside_3,
+            sole_bottom,
+            sole_top,
+            texture,
+            price,
+            status
+        } = req.body;
+
+        // Create an object with the provided properties for updating
+        const updateObject = {
+            username,
+            email,
+            size,
+            laces,
+            inside,
+            outside_1,
+            outside_2,
+            outside_3,
+            sole_bottom,
+            sole_top,
+            texture,
+            price,
+            status
+        };
+
+        // Remove undefined or null properties from the update object
+        Object.keys(updateObject).forEach(key => updateObject[key] == null && delete updateObject[key]);
+
         const updatedSneaker = await Sneakers.findByIdAndUpdate(
             sneakerId,
-            { $set: { status: req.body.status } },
+            { $set: updateObject },
             { new: true } // To return the updated document
         );
 
         if (!updatedSneaker) {
             return res.status(404).json({
-                "status": "error",
-                "message": "Sneaker not found"
+                status: "error",
+                message: "Sneaker not found"
             });
         }
 
         res.json({
-            "status": "success",
-            "data": {
-                "sneaker": updatedSneaker
+            status: "success",
+            data: {
+                sneaker: updatedSneaker
             }
         });
     } catch (err) {
         console.log(err);
         res.status(500).json({
-            "status": "error",
-            "message": "Failed to update sneaker",
-            "error": err
+            status: "error",
+            message: "Failed to update sneaker",
+            error: err
         });
     }
 };
@@ -140,8 +247,8 @@ const deleteSneaker = async (req, res) => {
 
         if (!mongoose.Types.ObjectId.isValid(sneakerId)) {
             return res.status(400).json({
-                "status": "error",
-                "message": "Invalid ObjectId format"
+                status: "error",
+                message: "Invalid ObjectId format"
             });
         }
 
@@ -149,24 +256,17 @@ const deleteSneaker = async (req, res) => {
 
         if (!deletedSneaker) {
             return res.status(404).json({
-                "status": "error",
-                "message": "Sneaker not found"
+                status: "error",
+                message: "Sneaker not found"
             });
         }
 
         res.json({
-            "status": "success",
-            "data": {
-                "sneaker": deletedSneaker
-            }
+            status: "success",
+            data: { sneaker: deletedSneaker }
         });
     } catch (err) {
-        console.log(err);
-        res.status(500).json({
-            "status": "error",
-            "message": "Failed to delete sneaker",
-            "error": err
-        });
+        handleServerError(res, err, "Failed to delete sneaker");
     }
 };
 
