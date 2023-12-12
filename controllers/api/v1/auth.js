@@ -32,20 +32,22 @@ const signup = async (req, res, next) => {
     });
 };
 
-const login = async (req, res) => {
-    try {
-        const user = await User.authenticate()(req.body.username, req.body.password);
+const login = async (req, res, next) => {
+    const user = await User.authenticate()(req.body.username, req.body.password).then(result => {
 
-        if (!user) {
+        // console.log(result.user.username);
+        // console.log(result.user._id);
+        // console.log(result.user.password);
+        if (!result.user) {
             return res.json({
-                "status": "error",
-                "message": "Invalid username or password",
-            });
+                "status": "failed",
+                "message": "Login failed"
+            })
         }
 
-        const token = jwt.sign({
-            id: user.id,
-            username: user.username  // Assuming username is the correct field for your model
+        let token = jwt.sign({
+            uid: result.user._id,
+            username: result.user.username
         }, config.get('jwt.secret'));
 
         return res.json({
@@ -54,14 +56,14 @@ const login = async (req, res) => {
                 "token": token
             }
         });
-    } catch (error) {
+    }).catch(error => {
         res.json({
             "status": "error",
-            "message": "Invalid username or password",
-        });
-        console.log(error);
-    } 
+            "message": error
+        })
+    });
 };
+
 
 // changePassword
 const changePassword = async (req, res) => {
