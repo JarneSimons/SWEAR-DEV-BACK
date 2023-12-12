@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const authController = require('../controllers/auth');
+const authController = require('../../../controllers/api/v1/auth');
 
 router.post('/signup', authController.signup);
 
@@ -8,6 +8,6 @@ router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
 //change password of the user
-//router.post('/change-password', authController.changePassword);
+router.post('/change-password', authController.changePassword);
 
 module.exports = router;    
