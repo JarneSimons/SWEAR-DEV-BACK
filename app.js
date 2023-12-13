@@ -11,7 +11,7 @@ const bodyParser = require('body-parser');
 
 //routers
 const indexRouter = require('./index');
-const usersRouter = require('./routers/users');
+const usersRouter = require('./routers/api/v1/users');
 const sneakersRouter = require('./routers/api/v1/sneakers');
 
 //mongoose connection
@@ -46,9 +46,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/api/v1/sneakers', sneakersRouter, passport.authenticate('jwt',{
-  session: false
-}), sneakersRouter);
+app.use('/api/v1/sneakers', sneakersRouter);
+// app.use('/api/v1/sneakers', passport.authenticate('jwt', {
+//   session: false
+// }), sneakersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
