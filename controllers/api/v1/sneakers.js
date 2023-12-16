@@ -44,7 +44,7 @@ const getSneakers = async (req, res) => {
             outside_3_texture,
             sole_bottom_texture,
             sole_top_texture,
-            price,
+            price
         };
 
         // Remove undefined or null properties from the query object
@@ -137,9 +137,7 @@ const postSneakers = async (req, res) => {
             outside_3_texture,
             sole_bottom_texture,
             sole_top_texture,
-            price,
-            statusShoe,
-            date
+            price
         } = req.body;
 
         const sneakers = new Sneakers({
@@ -160,9 +158,7 @@ const postSneakers = async (req, res) => {
             outside_3_texture,
             sole_bottom_texture,
             sole_top_texture,
-            price,
-            statusShoe,
-            date
+            price
         });
 
         const savedSneakers = await sneakers.save();
