@@ -20,6 +20,11 @@ const sneakersSchema = new Schema({
     outside_3_texture: String,
     sole_bottom_texture: String,
     sole_top_texture: String,
+    statusShoe: {type: String, default: "Ready to be produced"},
+    date: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const Sneakers = mongoose.model('Sneakers', sneakersSchema);
