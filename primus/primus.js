@@ -16,6 +16,7 @@ module.exports.go = (server) => {
 
             if (data.action === 'status') {
                 console.log('status werkt');
+                
                 primus.write(data);
                 console.log(data);
             }

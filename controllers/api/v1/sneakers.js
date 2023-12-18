@@ -192,83 +192,27 @@ const updateSneaker = async (req, res) => {
     try {
         const sneakerId = req.params.id;
 
-        if (!mongoose.Types.ObjectId.isValid(sneakerId)) {
-            return res.status(400).json({
-                status: "error",
-                message: "Invalid ObjectId format"
-            });
-        }
-
-        // Extract properties from the request body
-        const {
-            username,
-            email,
-            size,
-            laces_color,
-            inside_color,
-            outside_1_color,
-            outside_2_color,
-            outside_3_color,
-            sole_bottom_color,
-            sole_top_color,
-            laces_texture,
-            inside_texture,
-            outside_1_texture,
-            outside_2_texture,
-            outside_3_texture,
-            sole_bottom_texture,
-            sole_top_texture,
-            price,
-            statusShoe,
-            date
-        } = req.body;
-
-        // Create an object with the provided properties for updating
-        const updateObject = {
-            username,
-            email,
-            size,
-            laces_color,
-            inside_color,
-            outside_1_color,
-            outside_2_color,
-            outside_3_color,
-            sole_bottom_color,
-            sole_top_color,
-            laces_texture,
-            inside_texture,
-            outside_1_texture,
-            outside_2_texture,
-            outside_3_texture,
-            sole_bottom_texture,
-            sole_top_texture,
-            price,
-            statusShoe,
-            date
-        };
-
-        // Remove undefined or null properties from the update object
-        Object.keys(updateObject).forEach(key => updateObject[key] == null && delete updateObject[key]);
-
-        const updatedSneaker = await Sneakers.findByIdAndUpdate(
-            sneakerId,
-            { $set: updateObject },
-            { new: true } // To return the updated document
-        );
-
-        if (!updatedSneaker) {
-            return res.status(404).json({
-                status: "error",
-                message: "Sneaker not found"
-            });
-        }
-
-        res.json({
-            status: "success",
-            data: {
-                sneaker: updatedSneaker
+        // Get the status from the request body
+  let { status } = req.body;
+        //updateOne
+        const updatedSneaker = await Sneakers.updateOne(
+            { _id: sneakerId },
+            {
+              $set: {
+                status,
+              },
             }
-        });
+          );
+
+          console.log(updatedSneaker);
+
+         // Check if the document was found and updated
+    res.json({
+        status: "success",
+        data: {
+            status: status,
+        }
+    });
     } catch (err) {
         console.log(err);
         res.status(500).json({
