@@ -10,7 +10,7 @@ router.get('/', passport.authenticate('jwt', {session: false}), controllerSneake
 router.post('/', controllerSneakers.postSneakers)
 
 // update sneakers
-router.put('/:id', passport.authenticate('jwt', {session: false}), controllerSneakers.updateSneaker)
+router.patch('/:id',  controllerSneakers.updateSneaker)
 
 // delete sneakers
 router.delete('/:id', passport.authenticate('jwt', {session: false}), controllerSneakers.deleteSneaker)
