@@ -21,11 +21,11 @@ const signup = async (req, res, next) => {
         }, process.env.JWT_SECRET);
 
         res.json({
-            "status": "success",
-            "data": {
-                "token": token
-            }
-        })
+          status: "success",
+          data: {
+            token: token,
+          },
+        });
     }).catch(error => {
         res.json({
             "status": "error"
@@ -35,7 +35,6 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
     const user = await User.authenticate()(req.body.username, req.body.password).then(result => {
-
         // console.log(result.user.username);
         // console.log(result.user._id);
         // console.log(result.user.password);
